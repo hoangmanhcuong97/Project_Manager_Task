@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Task</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="/css/task.css" th:href="@{/css/task.css}">
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script src="/javascript/deleteTask.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div id="tableTask">
+    <div id="titleTask">
+        <h1>Task Manager</h1>
+    </div>
+    <div id="selectTask">
+        <nav class="navbar navbar-light bg-light" style="width: 100%">
+            <div>
+                <button type="button" class="btn btn-secondary"><a th:href="@{/exportCsv}">Export CSV</a></button>
+                <button type="button" class="btn btn-primary"><a th:href="@{/create-task}">Tạo mới</a></button>
+            </div>
+
+            <div id="search-dropdown">
+                <div id="search">
+                    <form class="form-inline" th:action="@{/list-task}" method="get">
+                        <input class="form-control mr-sm-2" name="title" type="text" placeholder="Search"
+                               aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="btn-group">
+                    <form action="/list-task" method="GET">
+                        <select type="button" class="btn btn-primary selectAction" style="float: right;" onchange="this.form.submit()" name="status">
+                            <option selected disabled hidden th:text="${statusView} == '' ? 'All' : ${statusView}"></option>
+                            <option value="Open">Open</option>
+                            <option value="Inprogress">Inprogress</option>
+                            <option value="Done">Done</option>
+                            <option value="All">All</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div id="tables">
+        <table border="1" id="tasks">
+            <tr>
+                <th>ID Task</th>
+                <th>Tiêu đề</th>
+                <th>Trạng thái</th>
+                <th>Action</th>
+            </tr>
+            <th:block th:each="task : ${page}">
+                <tr>
+                    <td th:text="${task.id}"></td>
+                    <td th:text="${task.title}"></td>
+                    <td th:text="${task.status}"></td>
+                    <td>
+                        <button type="button" class="btn btn-primary"><a th:href="@{/edit-task/__${task.id}__}">Chỉnh Sửa</a></button>
+                        <button type="button" class="btn btn-primary"><a th:href="@{/detail-task/__${task.id}__}">Chi tiết</a></button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                data-target="#exampleModalCenter" th:onclick="|deleteTask(${task.id})|">Xóa
+                        </button>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+        <div id="pageable">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/list-task(pSearch=${pSearch},status=${status}, p=0)}">First</a>
+                    </li>
+                    <li class="page-item" th:classappend="(${page.number}>=1) ? '' : disabled">
+                        <a class="page-link" th:href="@{/list-task(pSearch=${pSearch},status=${status} , p=${page.number}-1)}">Previous</a>
+                    </li>
+                    <li class="page-item" th:if="${page.number}>=1">
+                        <a class="page-link" th:href="@{/list-task(pSearch=${pSearch},status=${status} , p=${page.number}-1)}" th:text="(${page.number})"></a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" style="font-weight: bold;" tabindex="-1" aria-disabled="true" href="#" th:text="(${page.number}+1)"></a>
+                    </li>
+                    <li class="page-item" th:if="${page.number}<${page.totalPages}-1">
+                        <a class="page-link" th:href="@{/list-task(pSearch=${pSearch},status=${status} , p=${page.number + 1})}" th:text="(${page.number}+2)"></a>
+                    </li>
+                    <li class="page-item" th:classappend="(${page.number}<${page.totalPages}-1) ? '' : disabled">
+                        <a class="page-link" th:href="@{/list-task(pSearch=${pSearch},status=${status} , p=${page.number}+1)}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" th:href="@{/list-task(pSearch=${pSearch},status=${status} , p=${page.totalPages}-1)}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Delete task html popup -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form class="form-popup">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle" style="text-align: center">
+                        Bạn có chắc chắn muốn xóa không?
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    Khi xóa thì không thể lấy lại được.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span aria-hidden="true">No</span>
+                    </button>
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<form method="post" th:action="@{/logout}">
+    <div>
+        <button type="submit" class="btn btn-primary">Logout</button>
+    </div>
+</form>
+
+</body>
+</html>

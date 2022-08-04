@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="/css/signup.css" th:href="@{/css/signup.css}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+<th:block th:if="${message}">
+    <p style="color: red" th:text="${message}"></p>
+</th:block>
+
+<div class="card bg-light">
+    <article class="card-body mx-auto" style="max-width: 400px;">
+        <h4 class="card-title mt-3 text-center">Create Account</h4>
+        <p class="text-center">Get started with your free account</p>
+        <form th:action="@{/signup}" th:object="${FormSignUp}" method="post" id="sign-up">
+
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                </div>
+                <input id="username" class="form-control" style="width: 260px" placeholder="Username" type="text" th:field="*{username}">
+                <br>
+                <span class="form-message" style="color: red; font-size: 10px"></span>
+            </div> <!-- form-group// -->
+
+<!--            <div class="form-group input-group">-->
+<!--                <div class="input-group-prepend">-->
+<!--                    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>-->
+<!--                </div>-->
+<!--                <input id="email" class="form-control" style="width: 260px" placeholder="Email address" type="email" th:field="*{email}">-->
+<!--                <span class="form-message" style="color: red; font-size: 10px"></span>-->
+<!--            </div> &lt;!&ndash; form-group// &ndash;&gt;-->
+
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                </div>
+                <input id="password" class="form-control" style="width: 260px" placeholder="Create password" type="password" th:field="*{password}">
+                <span class="form-message" style="color: red; font-size: 10px"></span>
+            </div> <!-- form-group// -->
+
+            <div class="form-group input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                </div>
+                <input id="re-password" class="form-control" style="width: 260px" placeholder="Re_password" type="password" th:field="*{re_password}">
+                <span class="form-message" style="color: red; font-size: 10px"></span>
+            </div> <!-- form-group// -->
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block"> Create Account </button>
+            </div> <!-- form-group// -->
+            <p class="text-center">Have an account? <a th:href="@{/login}">Log In</a> </p>
+        </form>
+    </article>
+</div> <!-- card.// -->
+
+</div>
+<!--container end.//-->
+
+
+<script src="/javascript/validator.js"></script>
+<script>
+    Validator({
+        form: '#sign-up',
+        errorSelector: '.form-message',
+        rules : [
+            Validator.isRequired('#username'),
+            // Validator.isEmail('#email'),
+            Validator.minLength('#password', 6),
+        ]
+    });
+</script>
+</body>
+</html>

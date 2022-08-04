@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.amela.managertaskamela.repository.AccountMapper">
+    <resultMap id="result" type="com.amela.managertaskamela.model.Account">
+        <result property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="re_password" column="re_password" />
+    </resultMap>
+
+    <select id="findAccountByUsername" parameterType="String" resultMap="result">
+        SELECT * FROM account WHERE username = '${username}'
+    </select>
+
+    <select id="findAllAccount" resultMap="result">
+        SELECT * FROM account
+    </select>
+    <insert id="saveAccount" >
+        INSERT INTO account(username, password, re_password) VALUES
+        (#{account.username}, #{account.password}, #{account.re_password})
+    </insert>
+</mapper>

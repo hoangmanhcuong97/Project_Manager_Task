@@ -1,0 +1,52 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.amela.managertaskamela.repository.TaskMapper">
+    <resultMap id="result" type="com.amela.managertaskamela.model.Task">
+        <result property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="status" column="status" />
+        <association property="account" column="id" javaType="com.amela.managertaskamela.model.Account">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="password" column="password"></result>
+            <result property="re_password" column="re_password"></result>
+        </association>
+    </resultMap>
+
+    <select id="findAllByPage" resultMap="result" >
+        SELECT * FROM Task
+        WHERE title LIKE '%' #{title} '%'
+        AND status LIKE '%' #{status} '%'
+        ORDER BY id ASC
+            LIMIT #{pageable.offset}, #{pageable.pageSize};
+    </select>
+
+    <select id="countTasks" resultType="int">
+        SELECT count(*) FROM task
+        WHERE title LIKE '%' #{title} '%'
+        AND status LIKE '%' #{status} '%';
+    </select>
+
+    <insert id="createTask" >
+        INSERT INTO task (title, content, status) VALUES (#{task.title}, #{task.content}, #{task.status});
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="com.amela.managertaskamela.model.Task">
+        SELECT * FROM task WHERE id = #{id};
+    </select>
+
+    <delete id="deleteTaskById" parameterType="int">
+        DELETE from task WHERE id = #{id};
+    </delete>
+
+    <update id="updateTask" parameterType="com.amela.managertaskamela.model.Task">
+        UPDATE task SET title=#{task.title}, content=#{task.content}, status=#{task.status} WHERE id=#{task.id}
+    </update>
+
+    <select id="findAllTasks" resultMap="result">
+        SELECT * FROM task
+    </select>
+</mapper>
