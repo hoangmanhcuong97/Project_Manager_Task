@@ -4,12 +4,14 @@ import com.amela.managertaskamela.model.Account;
 import com.amela.managertaskamela.service.account.AccountService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -38,8 +40,12 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public ModelAndView createAccount (@ModelAttribute("FormSignUp") Account account){
+    public ModelAndView createAccount (@Valid @ModelAttribute("FormSignUp") Account account, BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView("/account/register");
+        if (bindingResult.hasErrors()) {
+            modelAndView = new ModelAndView("/account/register");
+            return modelAndView;
+        }
         List<Account> accounts = accountService.findAllAccount();
         if (accountService.existsAccountByUsername(accounts,account.getUsername())){
             modelAndView.addObject("message", "Username is existed!");

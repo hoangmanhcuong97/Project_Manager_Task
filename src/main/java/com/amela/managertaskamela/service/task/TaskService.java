@@ -20,4 +20,6 @@ public interface TaskService {
     void updateTask(Task task);
 
     List<Task> findAllTasks();
+
+    List<Task> findAll(String title, String status, Pageable pageable);
 }

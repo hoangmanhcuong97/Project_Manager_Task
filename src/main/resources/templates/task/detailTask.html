@@ -26,7 +26,7 @@
             </div>
             <div id="detail-button" style="border-top: 20px">
                 <button type="button" class="btn btn-secondary mb-2"><a th:href="@{/list-task}">Hủy</a></button>
-                <button type="submit" class="btn btn-primary mb-2">Chỉnh sửa</button>
+                <button type="submit" class="btn btn-primary mb-2"><a th:href="@{/edit-task/{id}(id=${detailTask.id})}">Chỉnh sửa</a></button>
                 <button type="button" class="btn btn-danger mb-2" data-toggle="modal" data-target="#exampleModalCenter" th:onclick="|deleteTask(${detailTask.id})|">Xóa</button>
             </div>
         </div>

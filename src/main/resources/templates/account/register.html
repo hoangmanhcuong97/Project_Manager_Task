@@ -27,7 +27,7 @@
                 </div>
                 <input id="username" class="form-control" style="width: 260px" placeholder="Username" type="text" th:field="*{username}">
                 <br>
-                <span class="form-message" style="color: red; font-size: 10px"></span>
+                <span class="form-message" style="color: red; font-size: 10px" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
             </div> <!-- form-group// -->
 
 <!--            <div class="form-group input-group">-->
@@ -42,8 +42,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                 </div>
-                <input id="password" class="form-control" style="width: 260px" placeholder="Create password" type="password" th:field="*{password}">
-                <span class="form-message" style="color: red; font-size: 10px"></span>
+                <input id="password" class="form-control" style="width: 260px" placeholder="password" type="password" th:field="*{password}">
+                <span class="form-message" style="color: red; font-size: 10px" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" ></span>
             </div> <!-- form-group// -->
 
             <div class="form-group input-group">
@@ -51,7 +51,7 @@
                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                 </div>
                 <input id="re-password" class="form-control" style="width: 260px" placeholder="Re_password" type="password" th:field="*{re_password}">
-                <span class="form-message" style="color: red; font-size: 10px"></span>
+                <span class="form-message" style="color: red; font-size: 10px" th:if="${#fields.hasErrors('re_password')}" th:errors="*{re_password}"></span>
             </div> <!-- form-group// -->
 
             <div class="form-group">

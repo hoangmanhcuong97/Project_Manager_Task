@@ -27,4 +27,8 @@ public interface TaskMapper {
 
     List<Task> findAllTasks();
 
+    List<Task> findAll(@Param("title") String title,
+                       @Param("status") String status,
+                       @Param("pageable") Pageable pageable);
+
 }

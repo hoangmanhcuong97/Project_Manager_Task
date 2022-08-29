@@ -8,7 +8,7 @@
         <result property="title" column="title" />
         <result property="content" column="content" />
         <result property="status" column="status" />
-        <association property="account" column="id" javaType="com.amela.managertaskamela.model.Account">
+        <association property="account" javaType="com.amela.managertaskamela.model.Account">
             <id property="id" column="id"></id>
             <result property="username" column="username"></result>
             <result property="password" column="password"></result>
@@ -48,5 +48,13 @@
 
     <select id="findAllTasks" resultMap="result">
         SELECT * FROM task
+    </select>
+
+    <select id="findAll" resultMap="result">
+        SELECT * FROM task t LEFT OUTER JOIN account a on t.id = a.uid
+        WHERE title LIKE '%' #{title} '%'
+        AND status LIKE '%' #{status} '%'
+        ORDER BY id ASC
+            LIMIT #{pageable.offset}, #{pageable.pageSize};;
     </select>
 </mapper>

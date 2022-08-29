@@ -32,8 +32,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void createTask(Task task) {
-        Account account = userDetailService.getCurrentAccount();
-        task.setAccount(account);
         taskMapper.createTask(task);
     }
 
@@ -55,6 +53,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> findAllTasks() {
         return taskMapper.findAllTasks();
+    }
+
+    @Override
+    public List<Task> findAll(String title, String status, Pageable pageable) {
+        return taskMapper.findAllByPage(title, status, pageable);
     }
 }
 

@@ -1,7 +1,10 @@
 package com.amela.managertaskamela.controller;
 
+import com.amela.managertaskamela.model.Account;
 import com.amela.managertaskamela.model.Task;
+import com.amela.managertaskamela.service.account.AccountServiceImpl;
 import com.amela.managertaskamela.service.task.TaskService;
+import com.amela.managertaskamela.service.task.TaskServiceImpl;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.stereotype.Controller;
@@ -26,9 +29,11 @@ import java.util.Optional;
 @EnableSpringDataWebSupport
 public class TaskController {
 
-    private final TaskService taskService;
+    private final TaskServiceImpl taskService;
 
-    public TaskController(TaskService taskService) {
+    private AccountServiceImpl accountService;
+
+    public TaskController(TaskServiceImpl taskService) {
         this.taskService = taskService;
     }
 
@@ -57,10 +62,12 @@ public class TaskController {
 
     @GetMapping("/create-task")
     public ModelAndView showCreateForm() {
+        System.out.println("Controller cuong");
         ModelAndView modelAndView = new ModelAndView("/task/createTask");
         modelAndView.addObject("createTask", new Task());
         return modelAndView;
     }
+
     @PostMapping("/create-task")
     public ModelAndView saveTask(@ModelAttribute("task") Task task) {
         task.setStatus("Open");
@@ -70,17 +77,19 @@ public class TaskController {
         modelAndView.addObject("message", "New task created successfully");
         return modelAndView;
     }
+
     @GetMapping("/detail-task/{id}")
-    public ModelAndView showDetailTask(@PathVariable("id") int id){
+    public ModelAndView showDetailTask(@PathVariable("id") int id) {
         Task task = taskService.findById(id);
         ModelAndView mav = new ModelAndView("/task/detailTask");
         mav.addObject("detailTask", task);
         return mav;
     }
+
     @GetMapping("/edit-task/{id}")
-    public ModelAndView showEditTask (@PathVariable int id){
+    public ModelAndView showEditTask(@PathVariable int id) {
         Task task = taskService.findById(id);
-        ModelAndView  modelAndView = new ModelAndView("/task/editTask");
+        ModelAndView modelAndView = new ModelAndView("/task/editTask");
         modelAndView.addObject("editTask", task);
         return modelAndView;
     }
@@ -90,12 +99,12 @@ public class TaskController {
         taskService.updateTask(task);
         ModelAndView modelAndView = new ModelAndView("/task/editTask");
         modelAndView.addObject("editTask", task);
-        modelAndView.addObject("message","Update thành công");
+        modelAndView.addObject("message", "Update thành công");
         return modelAndView;
     }
 
-    @GetMapping ("/delete-task/{id}")
-    public String deleteTask(@PathVariable("id") int id){
+    @GetMapping("/delete-task/{id}")
+    public String deleteTask(@PathVariable("id") int id) {
         taskService.deleteTaskById(id);
         return "redirect:/list-task";
     }
